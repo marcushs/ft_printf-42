@@ -6,11 +6,54 @@
 /*   By: hleung <hleung@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 10:47:46 by hleung            #+#    #+#             */
-/*   Updated: 2022/11/21 19:54:32 by hleung           ###   ########lyon.fr   */
+/*   Updated: 2022/11/22 15:41:13 by hleung           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+int	ft_check_format(char c, char *charset)
+{
+	int	i;
+
+	i = 0;
+	while (charset[i])
+	{
+		if (c == charset[i])
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	ft_print_format(va_list ptr, char format)
+{
+	int		len;
+	char	*low16;
+
+	low16 = "abcdef";
+	len = 0;
+	if (format == 'c')
+		return (len = ft_putchar((unsigned char)va_arg(ptr, int)));
+	else if (format == 's')
+		return (len = ft_putstr(va_arg(ptr, char *)));
+	else if (format == 'd' || format == 'i')
+		return (len = ft_putnbr(va_arg(ptr, int)));
+	else if (format == 'p')
+	{
+		ft_putstr("0x");
+		return (len = ft_putadd((unsigned long)va_arg(ptr, void *), low16) + 2);
+	}
+	else if (format == 'u')
+		return (len = ft_putnbr_unsigned(va_arg(ptr, unsigned int)));
+	else if (format == 'x')
+		return (len = ft_putnbr_base(va_arg(ptr, int), low16));
+	else if (format == 'X')
+		return (len = ft_putnbr_base(va_arg(ptr, int), "ABCDEF"));
+	else if (format == '%')
+		return (len = ft_putchar('%'));
+	return (len);
+}
 
 int	ft_printf(const char *arg, ...)
 {
@@ -21,53 +64,19 @@ int	ft_printf(const char *arg, ...)
 	len = 0;
 	i = 0;
 	va_start(ptr, arg);
+	if (write(1, 0, 0) == -1)
+		return (-1);
 	while (arg[i])
 	{
-		if (arg[i] == '%' && arg[i + 1] == 'c')
+		if (arg[i] == '%' && ft_check_format(arg[i + 1], "csdipuxX%%"))
 		{
-			len += ft_putchar((unsigned char)va_arg(ptr, int));
-			i++;
-		}
-		else if (arg[i] == '%' && arg[i + 1] == 's')
-		{
-			len += ft_putstr(va_arg(ptr, char *));
-			i++;
-		}
-		else if (arg[i] == '%' && (arg[i + 1] == 'd' || arg[i + 1] == 'i'))
-		{
-			len += ft_putnbr((unsigned int)va_arg(ptr, int));
-			i++;
-		}
-		else if (arg[i] == '%' && arg[i + 1] == 'p')
-		{
-			ft_putstr("0x");
-			len += ft_putadd((unsigned long)va_arg(ptr, void *), "abcdef") + 2;
-			i++;
-		}
-		else if (arg[i] == '%' && arg[i + 1] == 'u')
-		{
-			len += ft_putnbr_unsigned(va_arg(ptr, unsigned int));
-			i++;
-		}
-		else if (arg[i] == '%' && arg[i + 1] == 'x')
-		{
-			len += ft_putnbr_base(va_arg(ptr, int), "abcdef");
-			i++;
-		}
-		else if (arg[i] == '%' && arg[i + 1] == 'X')
-		{
-			len += ft_putnbr_base(va_arg(ptr, int), "ABCDEF");
-			i++;
-		}
-		else if (arg[i] == '%' && arg[i + 1] == '%')
-		{
-			len += ft_putchar('%');
+			len += ft_print_format(ptr, arg[i + 1]);
 			i++;
 		}
 		else
 			len += ft_putchar(arg[i]);
 		i++;
 	}
-	return (len);
 	va_end(ptr);
+	return (len);
 }

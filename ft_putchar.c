@@ -6,7 +6,7 @@
 /*   By: hleung <hleung@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 14:52:18 by hleung            #+#    #+#             */
-/*   Updated: 2022/11/21 18:41:10 by hleung           ###   ########lyon.fr   */
+/*   Updated: 2022/11/22 13:48:26 by hleung           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	ft_putchar(char c)
 {
-	write(1, &c, 1);
-	return (1);
+	if (write(1, &c, 1) == -1)
+		return (-1);
+	else
+		return (1);
 }

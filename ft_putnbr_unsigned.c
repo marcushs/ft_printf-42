@@ -6,7 +6,7 @@
 /*   By: hleung <hleung@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 14:24:23 by hleung            #+#    #+#             */
-/*   Updated: 2022/11/21 18:47:51 by hleung           ###   ########lyon.fr   */
+/*   Updated: 2022/11/22 14:41:38 by hleung           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,6 @@ int	ft_putnbr_unsigned(unsigned int n)
 	int	len;
 
 	len = 0;
-	if (n == 0)
-	{
-		ft_putchar('0');
-		return (1);
-	}
 	if (n < 0)
 		n = 4294967296 + n;
 	if (n > 9)

@@ -6,7 +6,7 @@
 /*   By: hleung <hleung@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 14:55:04 by hleung            #+#    #+#             */
-/*   Updated: 2022/11/21 17:58:03 by hleung           ###   ########lyon.fr   */
+/*   Updated: 2022/11/22 13:55:36 by hleung           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,10 @@ int	ft_putadd(unsigned long nbr, char *charset)
 	len = 0;
 	if (nbr == 0)
 	{
-		ft_putchar('0');
-		return (1);
+		if (ft_putchar('0') == -1)
+			return (-1);
+		else
+			return (1);
 	}
 	if (nbr > 15)
 		len += ft_putadd(nbr / 16, charset);
